@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+@php
+    $themePreference = request()->cookie('theme', 'light');
+    $isDarkMode = $themePreference === 'dark';
+@endphp
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,6 +19,21 @@
         body {
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #f8f9fa;
+        }
+
+        body.dark-mode a {
+            color: #9ecbff;
+        }
+
+        body.dark-mode a:hover {
+            color: #cfe3ff;
         }
 
         .card {
@@ -24,14 +43,49 @@
             transition: transform 0.3s ease;
         }
 
+        body.dark-mode .card {
+            background-color: #1f1f1f;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
         .card:hover {
             transform: translateY(-5px);
+        }
+
+        body.dark-mode .alert {
+            background-color: #2c2c2c;
+            color: #f8f9fa;
+            border-color: #3a3a3a;
+        }
+
+        body.dark-mode .btn-outline-secondary {
+            color: #f8f9fa;
+            border-color: #6c757d;
+        }
+
+        body.dark-mode .btn-outline-secondary:hover {
+            color: #121212;
+            background-color: #f8f9fa;
+        }
+
+        body.dark-mode .btn-close {
+            filter: invert(1);
         }
     </style>
 
     @stack('styles')
 </head>
-<body>
+<body class="{{ $isDarkMode ? 'dark-mode' : '' }}" data-bs-theme="{{ $isDarkMode ? 'dark' : 'light' }}">
+
+    <div class="container py-3 d-flex justify-content-end">
+        <form method="POST" action="{{ route('theme.toggle') }}">
+            @csrf
+            <button type="submit" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+                <i class="bi {{ $isDarkMode ? 'bi-sun-fill' : 'bi-moon-stars' }}"></i>
+                <span>{{ $isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
+            </button>
+        </form>
+    </div>
 
 
     <!-- Flash Messages -->

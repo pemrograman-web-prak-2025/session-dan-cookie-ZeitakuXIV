@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ToiletController;
 use App\Http\Controllers\ToiletSessionController;
+use App\Http\Controllers\ThemeController;
 use Illuminate\Support\Facades\Route;
 
 // Guest routes
@@ -18,6 +19,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
+
+// Theme preference
+Route::post('/theme/toggle', [ThemeController::class, 'toggle'])->name('theme.toggle');
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {
